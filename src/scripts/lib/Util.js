@@ -132,6 +132,11 @@ function getChromeVersion() {
   return match ? parseInt(match[1], 10) : null;
 }
 
+function getFirefoxVersion() {
+    var match = navigator.userAgent.match(/.*Firefox\/([0-9]+)/);
+    return match ? parseInt(match[1], 10) : null;
+}
+
 export default {
     whichTransitionEvent: whichTransitionEvent,
     mobileAndTabletcheck: mobileAndTabletcheck,
@@ -141,5 +146,6 @@ export default {
     extend: extend,
     deepCopy: deepCopy,
     getTouchesDistance: getTouchesDistance,
-    getChromeVersion: getChromeVersion
+    getChromeVersion: getChromeVersion,
+    getFirefoxVersion: getFirefoxVersion
 };
