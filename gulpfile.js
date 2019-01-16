@@ -37,7 +37,7 @@ gulp.task('build', function (done) {
     runSequence(
         'clean',
         'build-script',
-        'build-script-es6',
+        //'build-script-es6',
         'build-styles',
         function (error) {
             if(error){
@@ -55,8 +55,6 @@ gulp.task('clean', function (done) {
 
 function buildProdJs(destPath) {
     var process = lazypipe()
-        .pipe(buffer)
-        .pipe(uglify)
         .pipe(rename, {suffix: '.min'})
         .pipe(gulp.dest, destPath);
     return process();
@@ -81,6 +79,8 @@ gulp.task('build-script', function () {
         })
         .bundle()
         .pipe(source(fileName))
+            .pipe(buffer())
+            .pipe(uglify())
         .pipe(rename('videojs-panorama.v' + version + '.js'))
         .pipe(gulp.dest(destPath))
         .pipe(buildProdJs(destPath));
