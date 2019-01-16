@@ -289,8 +289,8 @@ var BaseCanvas = function (baseComponent, THREE, settings = {}) {
         playOnMobile: function () {
             this.isPlayOnMobile = true;
             if(this.settings.autoMobileOrientation) {
-                if (Util.getChromeVersion() >= 66) {
-                    // Chrome is using degrees instead of radians
+                if (Util.getChromeVersion() >= 66 || Util.getFirefoxVersion() >= 6) {
+                    // Chrome and Firefox is using degrees instead of radians
                     window.addEventListener('devicemotion', this.handleMobileOrientationDegrees.bind(this));
                 } else {
                     window.addEventListener('devicemotion', this.handleMobileOrientationRadians.bind(this));
