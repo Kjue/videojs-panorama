@@ -4,7 +4,7 @@
  */
 
 //in case it's running on node.js
-let win = {};
+var win = {};
 
 if (typeof window !== "undefined") {
     win = window;

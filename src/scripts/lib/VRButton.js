@@ -13,9 +13,10 @@ var VRButton = function(ButtonComponent){
         },
 
         handleClick: function () {
-            var canvas = this.player().getChild("Canvas");
+            const vjsDom = videojs.dom || videojs;
+            const canvas = this.player().getChild("Canvas");
             (!canvas.VRMode)? canvas.enableVR() : canvas.disableVR();
-            (canvas.VRMode)? this.addClass("enable") : this.removeClass("enable");
+            (canvas.VRMode)? vjsDom.addClass("enable") : vjsDom.removeClass("enable");
             (canvas.VRMode)?  this.player().trigger('VRModeOn'):  this.player().trigger('VRModeOff');
         },
 

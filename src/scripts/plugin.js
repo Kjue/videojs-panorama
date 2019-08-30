@@ -117,7 +117,8 @@ function fullscreenOnIOS(player, clickFn) {
  * @param    {Object} [options={}]
  */
 const onPlayerReady = (player, options, settings) => {
-    player.addClass('vjs-panorama');
+    var vjsDom = videojs.dom || videojs;
+    vjsDom.addClass('vjs-panorama');
     if(!Detector.webgl){
         PopupNotification(player, {
             NoticeMessage: Detector.getWebGLErrorMessage(),
@@ -141,8 +142,8 @@ const onPlayerReady = (player, options, settings) => {
         if(util.isIos()){
             fullscreenOnIOS(player, settings.getFullscreenToggleClickFn(player));
         }
-        player.addClass("vjs-panorama-mobile-inline-video");
-        player.removeClass("vjs-using-native-controls");
+        vjsDom.addClass("vjs-panorama-mobile-inline-video");
+        vjsDom.removeClass("vjs-using-native-controls");
         canvas.playOnMobile();
     }
     if(options.showNotice){

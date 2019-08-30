@@ -50,9 +50,10 @@ QUnit.test('registers itself with video.js', function(assert) {
 
   // Tick the clock forward enough to trigger the player to be "ready".
   this.clock.tick(1);
+  var vjsDom = videojs.dom || videojs;
 
   assert.ok(
-    this.player.hasClass('vjs-panorama'),
+    vjsDom.hasClass('vjs-panorama'),
     'the plugin adds a class to the player'
   );
 });

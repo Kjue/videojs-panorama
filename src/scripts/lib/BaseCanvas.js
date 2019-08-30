@@ -13,6 +13,7 @@ import MobileBuffering from '../lib/MobileBuffering';
 import Util from '../lib/Util';
 
 const HAVE_CURRENT_DATA = 2;
+const vjsDom = videojs.dom || videojs;
 
 var BaseCanvas = function (baseComponent, THREE, settings = {}) {
     return {
@@ -235,7 +236,7 @@ var BaseCanvas = function (baseComponent, THREE, settings = {}) {
             if(!this.render_animation) return;
             this.requestAnimationId = requestAnimationFrame( this.animate.bind(this) );
             if(!this.player().paused()){
-                if(typeof(this.texture) !== "undefined" && (!this.isPlayOnMobile && this.player().readyState() >= HAVE_CURRENT_DATA || this.isPlayOnMobile && this.player().hasClass("vjs-playing"))) {
+                if(typeof(this.texture) !== "undefined" && (!this.isPlayOnMobile && this.player().readyState() >= HAVE_CURRENT_DATA || this.isPlayOnMobile && vjsDom.hasClass("vjs-playing"))) {
                     var ct = new Date().getTime();
                     if (ct - this.time >= 30) {
                         this.texture.needsUpdate = true;
@@ -244,12 +245,12 @@ var BaseCanvas = function (baseComponent, THREE, settings = {}) {
                     if(this.isPlayOnMobile){
                         var currentTime = this.player().currentTime();
                         if(MobileBuffering.isBuffering(currentTime)){
-                            if(!this.player().hasClass("vjs-panorama-mobile-inline-video-buffering")){
-                                this.player().addClass("vjs-panorama-mobile-inline-video-buffering");
+                            if(!vjsDom.hasClass("vjs-panorama-mobile-inline-video-buffering")){
+                                vjsDom.addClass("vjs-panorama-mobile-inline-video-buffering");
                             }
                         }else{
-                            if(this.player().hasClass("vjs-panorama-mobile-inline-video-buffering")){
-                                this.player().removeClass("vjs-panorama-mobile-inline-video-buffering");
+                            if (vjsDom.hasClass("vjs-panorama-mobile-inline-video-buffering")){
+                                vjsDom.removeClass("vjs-panorama-mobile-inline-video-buffering");
                             }
                         }
                     }
