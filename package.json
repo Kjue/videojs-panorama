@@ -25,39 +25,38 @@
   "jsnext:main": "dist/videojs-panorama.es6.js",
   "files": [
     "dist/**",
-    "src/**"
+    "src/**",
+    "README.md",
+    "LICENSE"
   ],
-  "dependencies": {
-    "iphone-inline-video": "^1.9.3",
-    "three": "^0.86.0",
-    "video.js": "^6.2.4"
+  "scripts": {
+    "prepare": "rimraf dist/* && rollup -c --environment BUILD:production"
+  },
+  "dependencies": {},
+  "peerDependencies": {
+    "three": ">=0.81",
+    "video.js": ">=4"
   },
   "devDependencies": {
-    "babel-preset-es2015": "^6.16.0",
-    "babel-preset-es2015-rollup": "^1.2.0",
-    "babelify": "^7.3.0",
-    "bannerize": "^1.0.2",
-    "bower": "^1.7.9",
-    "browser-sync": "^2.14.0",
-    "browserify": "^12.0.2",
-    "browserify-shim": "^3.8.12",
-    "browserify-versionify": "^1.0.6",
-    "del": "^2.2.2",
-    "gulp": "^3.9.0",
-    "gulp-cssnano": "^2.1.2",
-    "gulp-rename": "^1.2.2",
-    "gulp-sass": "^2.3.2",
-    "gulp-uglify": "^2.0.0",
-    "lazypipe": "^1.0.1",
-    "merge-stream": "^1.0.0",
-    "rollup-babel-lib-bundler": "^3.1.0",
-    "rollup-plugin-babel": "^2.6.1",
-    "run-sequence": "^1.2.2",
-    "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^1.1.0"
-  },
-  "peerDependencies": {
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "babel-loader": "^8.0.6",
+    "css-loader": "^3.2.0",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "iphone-inline-video": "2.2.2",
+    "node-sass": "^4.12.0",
+    "rimraf": "^3.0.0",
+    "rollup": "^1.20.3",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-babel-minify": "^9.0.0",
+    "rollup-plugin-terser": "^5.1.1",
+    "rollup-plugin-uglify": "^6.0.0",
+    "sass-loader": "^8.0.0",
+    "style-loader": "^1.0.0",
+    "three": ">=0.81",
+    "uglifyjs-webpack-plugin": "^2.2.0",
     "video.js": ">=4",
-    "three": ">=0.81"
+    "webpack": "^4.39.3",
+    "webpack-cli": "^3.3.7"
   }
 }
