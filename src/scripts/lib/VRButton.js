@@ -1,6 +1,6 @@
 /**
  * Created by yanwsh on 8/13/16.
- * Refactored by kjuetus 09/02/19.
+ * Refactored by Kjue 09/02/19.
  */
 import videojs from 'video.js'
 const Button = videojs.getComponent('Button')

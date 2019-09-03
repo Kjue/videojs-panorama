@@ -1,6 +1,6 @@
 /**
  * Created by yanwsh on 6/6/16.
- * Refactored by kjuetus 09/02/19.
+ * Refactored by Kjue 09/02/19.
  */
 var MobileBuffering = {
   prev_currentTime: 0,

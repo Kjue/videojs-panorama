@@ -1,6 +1,6 @@
 /**
  * Created by yanwsh on 4/3/16.
- * Refactored by kjuetus 09/02/19.
+ * Refactored by Kjue 09/02/19.
  */
 'use strict'
 

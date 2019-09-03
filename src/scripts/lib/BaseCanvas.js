@@ -2,7 +2,7 @@
  *
  * (c) Wensheng Yan <yanwsh@gmail.com>
  * Date: 10/30/16
- * Refactored by kjuetus 09/02/19.
+ * Refactored by Kjue 09/02/19.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
