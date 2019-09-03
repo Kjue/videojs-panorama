@@ -24,6 +24,7 @@
 }
 
 .video-js {
+  touch-action: none !important;
   .vjs-control-bar{
     z-index: 5;
 
@@ -47,6 +48,7 @@
 
   &.vjs-panorama {
     display: block;
+    touch-action: none !important;
 
     .vjs-video-canvas{
       position: absolute;

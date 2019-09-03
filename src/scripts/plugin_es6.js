@@ -7,6 +7,7 @@ import './lib/Notice'
 import './lib/HelperCanvas'
 import './lib/VRButton'
 import panorama from './plugin'
+import '../styles/plugin.scss'
 
 function getTech (player) {
   return player.tech({ IWillNotUseThisInPlugins: true }).el()
