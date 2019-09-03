@@ -99,7 +99,7 @@ class BaseCanvas extends Component {
   }
 
   handleDispose (event) {
-    var _this = this.getChild('Canvas')
+    var _this = this.getChild('Canvas') || this
     this.off('mousemove', this.handleMouseMove)
     this.off('touchmove', this.handleTouchMove)
     this.off('mousedown', this.handleMouseDown)
@@ -115,7 +115,7 @@ class BaseCanvas extends Component {
     this.off('mouseenter', this.handleMouseEnter)
     this.off('mouseleave', this.handleMouseLease)
     this.off('dispose', this.handleDispose)
-    this.stopAnimation()
+    _this.stopAnimation()
   }
 
   startAnimation () {
@@ -132,13 +132,14 @@ class BaseCanvas extends Component {
   }
 
   handleResize () {
-    this.width = this.player().el().offsetWidth
-    this.height = this.player().el().offsetHeight
-    this.renderer.setSize(this.width, this.height)
+    var _this = this.getChild('Canvas') || this
+    _this.width = this.el().offsetWidth
+    _this.height = this.el().offsetHeight
+    _this.renderer.setSize(this.width, this.height)
   }
 
   handleMouseUp (event) {
-    var _this = this.getChild('Canvas')
+    var _this = this.getChild('Canvas') || this
     _this.mouseDown = false
 
     if (_this.clickToToggle) {
@@ -149,14 +150,14 @@ class BaseCanvas extends Component {
       var diffY = Math.abs(clientY - _this.onPointerDownPointerY)
 
       if (diffX < 0.1 && diffY < 0.1) {
-        this.paused() ? this.play() : this.pause()
+        _this.player().paused() ? _this.player().play() : _this.player().pause()
       }
     }
   }
 
   handleMouseDown (event) {
-    event.preventDefault()
-    var _this = this.getChild('Canvas')
+    if (event.type != 'touchstart') event.preventDefault()
+    var _this = this.getChild('Canvas') || this
     var clientX = event.clientX || (event.touches && event.touches[0].clientX)
     var clientY = event.clientY || (event.touches && event.touches[0].clientY)
     if (typeof clientX === 'undefined' || clientY === 'undefined') return
@@ -168,21 +169,23 @@ class BaseCanvas extends Component {
   }
 
   handleTouchStart (event) {
+    var _this = this.getChild('Canvas') || this
     if (event.touches.length > 1) {
-      this.isUserPinch = true
-      this.multiTouchDistance = Util.getTouchesDistance(event.touches)
+      _this.isUserPinch = true
+      _this.multiTouchDistance = Util.getTouchesDistance(event.touches)
     }
 
-    this.handleMouseDown(event)
+    _this.handleMouseDown(event)
   }
 
   handleTouchEnd (event) {
-    this.isUserPinch = false
-    this.handleMouseUp(event)
+    var _this = this.getChild('Canvas') || this
+    _this.isUserPinch = false
+    _this.handleMouseUp(event)
   }
 
   handleMouseMove (event, extra) {
-    var _this = this.getChild('Canvas')
+    var _this = this.getChild('Canvas') || this
     var clientX = event.clientX || (event.touches && event.touches[0].clientX)
     var clientY = event.clientY || (event.touches && event.touches[0].clientY)
     if (typeof clientX === 'undefined' || clientY === 'undefined') return
@@ -202,19 +205,25 @@ class BaseCanvas extends Component {
 
   handleTouchMove (event) {
     // handle single touch event,
-    if (!this.isUserPinch || event.touches.length <= 1) {
-      this.handleMouseMove(event)
+    var _this = this.getChild('Canvas') || this
+    if (!_this.isUserPinch || event.touches.length <= 1) {
+      _this.handleMouseMove(event)
     }
   }
 
   handleMobileOrientation (event, x, y) {
-    var portrait = typeof event.portrait !== 'undefined' ? event.portrait : window.matchMedia('(orientation: portrait)').matches
-    var landscape = typeof event.landscape !== 'undefined' ? event.landscape : window.matchMedia('(orientation: landscape)').matches
+    var _this = this.getChild('Canvas') || this
+    var portrait = typeof event.portrait !== 'undefined'
+      ? event.portrait
+      : window.matchMedia('(orientation: portrait)').matches
+    var landscape = typeof event.landscape !== 'undefined'
+      ? event.landscape
+      : window.matchMedia('(orientation: landscape)').matches
     var orientation = event.orientation || window.orientation
 
     if (portrait) {
-      this.lon = this.lon - y * this.settings.mobileVibrationValue
-      this.lat = this.lat + x * this.settings.mobileVibrationValue
+      _this.lon = _this.lon - y * _this.settings.mobileVibrationValue
+      _this.lat = _this.lat + x * _this.settings.mobileVibrationValue
     } else if (landscape) {
       var orientationDegree = -90
 
@@ -222,39 +231,47 @@ class BaseCanvas extends Component {
         orientationDegree = orientation
       }
 
-      this.lon = orientationDegree == -90 ? this.lon + x * this.settings.mobileVibrationValue : this.lon - x * this.settings.mobileVibrationValue
-      this.lat = orientationDegree == -90 ? this.lat + y * this.settings.mobileVibrationValue : this.lat - y * this.settings.mobileVibrationValue
+      _this.lon = orientationDegree == -90
+        ? _this.lon + x * _this.settings.mobileVibrationValue
+        : _this.lon - x * this.settings.mobileVibrationValue
+      _this.lat = orientationDegree == -90
+        ? _this.lat + y * _this.settings.mobileVibrationValue
+        : _this.lat - y * this.settings.mobileVibrationValue
     }
   }
 
   handleMobileOrientationDegrees (event) {
+    var _this = this.getChild('Canvas') || this
     if (typeof event.rotationRate === 'undefined') return
     var x = event.rotationRate.alpha * Math.PI / 180
     var y = event.rotationRate.beta * Math.PI / 180
-    this.handleMobileOrientation(event, x, y)
+    _this.handleMobileOrientation(event, x, y)
   }
 
   handleMobileOrientationRadians (event) {
+    var _this = this.getChild('Canvas') || this
     if (typeof event.rotationRate === 'undefined') return
     var x = event.rotationRate.alpha
     var y = event.rotationRate.beta
-    this.handleMobileOrientation(event, x, y)
+    _this.handleMobileOrientation(event, x, y)
   }
 
   handleMouseWheel (event) {
     event.stopPropagation()
-    event.preventDefault()
+    if (event.type != 'touchmove') event.preventDefault()
   }
 
   handleMouseEnter (event) {
-    this.isUserInteracting = true
+    var _this = this.getChild('Canvas') || this
+    _this.isUserInteracting = true
   }
 
   handleMouseLease (event) {
-    this.isUserInteracting = false
+    var _this = this.getChild('Canvas') || this
+    _this.isUserInteracting = false
 
-    if (this.mouseDown) {
-      this.mouseDown = false
+    if (_this.mouseDown) {
+      _this.mouseDown = false
     }
   }
 

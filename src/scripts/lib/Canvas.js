@@ -81,7 +81,8 @@ class Canvas extends BaseCanvas {
   }
 
   enableVR () {
-    this.VRMode = true
+    var _this = this.getChild('Canvas') || this
+    _this.VRMode = true
 
     if (typeof vrHMD !== 'undefined') {
       // eslint-disable-next-line no-undef
@@ -89,110 +90,115 @@ class Canvas extends BaseCanvas {
 
       // eslint-disable-next-line no-undef
       var eyeParamsR = vrHMD.getEyeParameters('right')
-      this.eyeFOVL = eyeParamsL.recommendedFieldOfView
-      this.eyeFOVR = eyeParamsR.recommendedFieldOfView
+      _this.eyeFOVL = eyeParamsL.recommendedFieldOfView
+      _this.eyeFOVR = eyeParamsR.recommendedFieldOfView
     }
 
-    this.cameraL = new PerspectiveCamera(this.camera.fov, this.width / 2 / this.height, 1, 2000)
-    this.cameraR = new PerspectiveCamera(this.camera.fov, this.width / 2 / this.height, 1, 2000)
+    _this.cameraL = new PerspectiveCamera(_this.camera.fov, _this.width / 2 / _this.height, 1, 2000)
+    _this.cameraR = new PerspectiveCamera(_this.camera.fov, _this.width / 2 / _this.height, 1, 2000)
   }
 
   disableVR () {
-    this.VRMode = false
-    this.renderer.setViewport(0, 0, this.width, this.height)
-    this.renderer.setScissor(0, 0, this.width, this.height)
+    var _this = this.getChild('Canvas') || this
+    _this.VRMode = false
+    _this.renderer.setViewport(0, 0, _this.width, _this.height)
+    _this.renderer.setScissor(0, 0, _this.width, _this.height)
   }
 
   handleResize () {
-    super.handleResize(this)
-    this.camera.aspect = this.width / this.height
-    this.camera.updateProjectionMatrix()
+    var _this = this.getChild('Canvas') || this
+    super.handleResize()
+    _this.camera.aspect = _this.width / _this.height
+    _this.camera.updateProjectionMatrix()
 
-    if (this.VRMode) {
-      this.cameraL.aspect = this.camera.aspect / 2
-      this.cameraR.aspect = this.camera.aspect / 2
-      this.cameraL.updateProjectionMatrix()
-      this.cameraR.updateProjectionMatrix()
+    if (_this.VRMode) {
+      _this.cameraL.aspect = _this.camera.aspect / 2
+      _this.cameraR.aspect = _this.camera.aspect / 2
+      _this.cameraL.updateProjectionMatrix()
+      _this.cameraR.updateProjectionMatrix()
     }
   }
 
   handleMouseWheel (event) {
+    var _this = this.getChild('Canvas') || this
     super.handleMouseWheel(event)
 
     if (event.wheelDeltaY) {
       // WebKit
-      this.camera.fov -= event.wheelDeltaY * 0.05
+      _this.camera.fov -= event.wheelDeltaY * 0.05
     } else if (event.wheelDelta) {
       // Opera / Explorer 9
-      this.camera.fov -= event.wheelDelta * 0.05
+      _this.camera.fov -= event.wheelDelta * 0.05
     } else if (event.detail) {
       // Firefox
-      this.camera.fov += event.detail * 1.0
+      _this.camera.fov += event.detail * 1.0
     }
 
-    this.camera.fov = Math.min(this.settings.maxFov, this.camera.fov)
-    this.camera.fov = Math.max(this.settings.minFov, this.camera.fov)
-    this.camera.updateProjectionMatrix()
+    _this.camera.fov = Math.min(_this.settings.maxFov, _this.camera.fov)
+    _this.camera.fov = Math.max(_this.settings.minFov, _this.camera.fov)
+    _this.camera.updateProjectionMatrix()
 
-    if (this.VRMode) {
-      this.cameraL.fov = this.camera.fov
-      this.cameraR.fov = this.camera.fov
-      this.cameraL.updateProjectionMatrix()
-      this.cameraR.updateProjectionMatrix()
+    if (_this.VRMode) {
+      _this.cameraL.fov = _this.camera.fov
+      _this.cameraR.fov = _this.camera.fov
+      _this.cameraL.updateProjectionMatrix()
+      _this.cameraR.updateProjectionMatrix()
     }
   }
 
   handleTouchMove (event) {
-    super.handleTouchMove(this, event)
+    var _this = this.getChild('Canvas') || this
+    super.handleTouchMove(event)
 
-    if (this.isUserPinch) {
+    if (_this.isUserPinch) {
       const currentDistance = Util.getTouchesDistance(event.touches)
-      event.wheelDeltaY = (currentDistance - this.multiTouchDistance) * 2
-      this.handleMouseWheel(this, event)
-      this.multiTouchDistance = currentDistance
+      event.wheelDeltaY = (currentDistance - _this.multiTouchDistance) * 2
+      _this.handleMouseWheel(event)
+      _this.multiTouchDistance = currentDistance
     }
   }
 
   render () {
-    super.render(this)
-    this.camera.target.x = 500 * Math.sin(this.phi) * Math.cos(this.theta)
-    this.camera.target.y = 500 * Math.cos(this.phi)
-    this.camera.target.z = 500 * Math.sin(this.phi) * Math.sin(this.theta)
-    this.camera.lookAt(this.camera.target)
+    var _this = this.getChild('Canvas') || this
+    super.render()
+    _this.camera.target.x = 500 * Math.sin(_this.phi) * Math.cos(_this.theta)
+    _this.camera.target.y = 500 * Math.cos(_this.phi)
+    _this.camera.target.z = 500 * Math.sin(_this.phi) * Math.sin(_this.theta)
+    _this.camera.lookAt(_this.camera.target)
 
-    if (!this.VRMode) {
-      this.renderer.render(this.scene, this.camera)
+    if (!_this.VRMode) {
+      _this.renderer.render(this.scene, this.camera)
     } else {
-      var viewPortWidth = this.width / 2
-      var viewPortHeight = this.height
+      var viewPortWidth = _this.width / 2
+      var viewPortHeight = _this.height
 
       if (typeof vrHMD !== 'undefined') {
-        this.cameraL.projectionMatrix = Util.fovToProjection(this.eyeFOVL, true, this.camera.near, this.camera.far)
-        this.cameraR.projectionMatrix = Util.fovToProjection(this.eyeFOVR, true, this.camera.near, this.camera.far)
+        _this.cameraL.projectionMatrix = Util.fovToProjection(_this.eyeFOVL, true, _this.camera.near, _this.camera.far)
+        _this.cameraR.projectionMatrix = Util.fovToProjection(_this.eyeFOVR, true, _this.camera.near, _this.camera.far)
       } else {
-        var lonL = this.lon + this.settings.VRGapDegree
-        var lonR = this.lon - this.settings.VRGapDegree
+        var lonL = _this.lon + _this.settings.VRGapDegree
+        var lonR = _this.lon - _this.settings.VRGapDegree
         var thetaL = _Math.degToRad(lonL)
         var thetaR = _Math.degToRad(lonR)
-        var targetL = Util.deepCopy(this.camera.target)
-        targetL.x = 500 * Math.sin(this.phi) * Math.cos(thetaL)
-        targetL.z = 500 * Math.sin(this.phi) * Math.sin(thetaL)
-        this.cameraL.lookAt(targetL)
-        var targetR = Util.deepCopy(this.camera.target)
-        targetR.x = 500 * Math.sin(this.phi) * Math.cos(thetaR)
-        targetR.z = 500 * Math.sin(this.phi) * Math.sin(thetaR)
-        this.cameraR.lookAt(targetR)
+        var targetL = Util.deepCopy(_this.camera.target)
+        targetL.x = 500 * Math.sin(_this.phi) * Math.cos(thetaL)
+        targetL.z = 500 * Math.sin(_this.phi) * Math.sin(thetaL)
+        _this.cameraL.lookAt(targetL)
+        var targetR = Util.deepCopy(_this.camera.target)
+        targetR.x = 500 * Math.sin(_this.phi) * Math.cos(thetaR)
+        targetR.z = 500 * Math.sin(_this.phi) * Math.sin(thetaR)
+        _this.cameraR.lookAt(targetR)
       }
 
       // render left eye
-      this.renderer.setViewport(0, 0, viewPortWidth, viewPortHeight)
-      this.renderer.setScissor(0, 0, viewPortWidth, viewPortHeight)
-      this.renderer.render(this.scene, this.cameraL)
+      _this.renderer.setViewport(0, 0, viewPortWidth, viewPortHeight)
+      _this.renderer.setScissor(0, 0, viewPortWidth, viewPortHeight)
+      _this.renderer.render(_this.scene, _this.cameraL)
 
       // render right eye
-      this.renderer.setViewport(viewPortWidth, 0, viewPortWidth, viewPortHeight)
-      this.renderer.setScissor(viewPortWidth, 0, viewPortWidth, viewPortHeight)
-      this.renderer.render(this.scene, this.cameraR)
+      _this.renderer.setViewport(viewPortWidth, 0, viewPortWidth, viewPortHeight)
+      _this.renderer.setScissor(viewPortWidth, 0, viewPortWidth, viewPortHeight)
+      _this.renderer.render(_this.scene, _this.cameraR)
     }
   }
 }
